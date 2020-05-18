@@ -70,9 +70,9 @@ class WeatherLoggerTableViewController: UITableViewController {
         
         let weatherURL = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&APPID=a6d75244f45c82b9690164487bcfb318&units=imperial")!
         
-        let weatherResource = Resource<WeatherViewModel>(url: weatherURL) { data in
+        let weatherResource = Resource<WeatherModel>(url: weatherURL) { data in
             
-            let weatherVM = try? JSONDecoder().decode(WeatherViewModel.self, from: data)
+            let weatherVM = try? JSONDecoder().decode(WeatherModel.self, from: data)
             return weatherVM
         }
         

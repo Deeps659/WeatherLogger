@@ -10,9 +10,7 @@ import Foundation
 
 struct WeatherLoggerViewModel {
     
-    
-    
-    mutating func addWeatherViewModel(_ vm: WeatherViewModel, dateString : String) {
+    func addWeatherViewModel(_ vm: WeatherModel, dateString : String) {
         var weatherViewModels = [[String : Any]]()
         let userDefaults = UserDefaults.standard
         let dict = ["temp":vm.currentTemperature.temperature, "city":vm.name ,"date": dateString,"humidity": vm.currentTemperature.humidity, "tempMin":vm.currentTemperature.temperatureMin, "tempMax":vm.currentTemperature.temperatureMax] as [String : Any]
@@ -44,29 +42,6 @@ struct WeatherLoggerViewModel {
     
 }
 
-struct WeatherViewModel: Decodable {
-    
-    let name: String
-    let currentTemperature: TemperatureViewModel
-    
-    private enum CodingKeys: String, CodingKey {
-        case name
-        case currentTemperature = "main"
-    }
-    
-}
 
-struct TemperatureViewModel: Decodable {
-    
-    let temperature: Double
-    let temperatureMin: Double
-    let temperatureMax: Double
-    let humidity: Int
-    
-    private enum CodingKeys: String, CodingKey {
-        case temperature = "temp"
-        case temperatureMin = "temp_min"
-        case temperatureMax = "temp_max"
-        case humidity
-    }
-}
+
+
