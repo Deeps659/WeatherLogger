@@ -21,7 +21,12 @@
 		456B9D902418BCCF005AFBE6 /* ChangeCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456B9D8F2418BCCF005AFBE6 /* ChangeCityViewController.swift */; };
 		456B9D922418DAC2005AFBE6 /* WeatherDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456B9D912418DAC2005AFBE6 /* WeatherDetailsViewController.swift */; };
 		456B9D96241916E1005AFBE6 /* WeatherLoggerViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456B9D95241916E1005AFBE6 /* WeatherLoggerViewModelTest.swift */; };
-		456FF1922472F59900585E27 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456FF1912472F59900585E27 /* WeatherModel.swift */; };
+		456FF19524747D3400585E27 /* WeatherLoggerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 456FF19324747D3400585E27 /* WeatherLoggerModel.xcdatamodeld */; };
+		456FF19A24747F3400585E27 /* WeatherModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456FF19624747F3400585E27 /* WeatherModel+CoreDataClass.swift */; };
+		456FF19B24747F3400585E27 /* WeatherModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456FF19724747F3400585E27 /* WeatherModel+CoreDataProperties.swift */; };
+		456FF19C24747F3400585E27 /* TemperatureModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456FF19824747F3400585E27 /* TemperatureModel+CoreDataClass.swift */; };
+		456FF19D24747F3400585E27 /* TemperatureModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456FF19924747F3400585E27 /* TemperatureModel+CoreDataProperties.swift */; };
+		456FF1A02477078900585E27 /* CodingUserInfoKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456FF19F2477078900585E27 /* CodingUserInfoKey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +67,12 @@
 		456B9D8F2418BCCF005AFBE6 /* ChangeCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCityViewController.swift; sourceTree = "<group>"; };
 		456B9D912418DAC2005AFBE6 /* WeatherDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsViewController.swift; sourceTree = "<group>"; };
 		456B9D95241916E1005AFBE6 /* WeatherLoggerViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLoggerViewModelTest.swift; sourceTree = "<group>"; };
-		456FF1912472F59900585E27 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		456FF19424747D3400585E27 /* WeatherLoggerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WeatherLoggerModel.xcdatamodel; sourceTree = "<group>"; };
+		456FF19624747F3400585E27 /* WeatherModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeatherModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		456FF19724747F3400585E27 /* WeatherModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeatherModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		456FF19824747F3400585E27 /* TemperatureModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemperatureModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		456FF19924747F3400585E27 /* TemperatureModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemperatureModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		456FF19F2477078900585E27 /* CodingUserInfoKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodingUserInfoKey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +123,7 @@
 		456B9D512417E496005AFBE6 /* WeatherLogger */ = {
 			isa = PBXGroup;
 			children = (
+				456FF19E2474869800585E27 /* Extensions */,
 				456FF1902472F56500585E27 /* Model */,
 				456B9D8C2417F4FF005AFBE6 /* Service */,
 				456B9D8B2417F443005AFBE6 /* View */,
@@ -192,9 +203,21 @@
 		456FF1902472F56500585E27 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				456FF1912472F59900585E27 /* WeatherModel.swift */,
+				456FF19624747F3400585E27 /* WeatherModel+CoreDataClass.swift */,
+				456FF19724747F3400585E27 /* WeatherModel+CoreDataProperties.swift */,
+				456FF19824747F3400585E27 /* TemperatureModel+CoreDataClass.swift */,
+				456FF19924747F3400585E27 /* TemperatureModel+CoreDataProperties.swift */,
+				456FF19324747D3400585E27 /* WeatherLoggerModel.xcdatamodeld */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		456FF19E2474869800585E27 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				456FF19F2477078900585E27 /* CodingUserInfoKey.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -331,12 +354,17 @@
 				456B9D852417ECB3005AFBE6 /* WeatherLoggerTableViewCell.swift in Sources */,
 				456B9D8A2417EECF005AFBE6 /* WeatherLoggerViewModel.swift in Sources */,
 				456B9D922418DAC2005AFBE6 /* WeatherDetailsViewController.swift in Sources */,
+				456FF1A02477078900585E27 /* CodingUserInfoKey.swift in Sources */,
 				456B9D532417E496005AFBE6 /* AppDelegate.swift in Sources */,
-				456FF1922472F59900585E27 /* WeatherModel.swift in Sources */,
+				456FF19C24747F3400585E27 /* TemperatureModel+CoreDataClass.swift in Sources */,
 				456B9D902418BCCF005AFBE6 /* ChangeCityViewController.swift in Sources */,
 				456B9D872417ECD8005AFBE6 /* WeatherLoggerTableViewController.swift in Sources */,
 				456B9D552417E496005AFBE6 /* SceneDelegate.swift in Sources */,
+				456FF19B24747F3400585E27 /* WeatherModel+CoreDataProperties.swift in Sources */,
+				456FF19524747D3400585E27 /* WeatherLoggerModel.xcdatamodeld in Sources */,
 				456B9D8E2417F521005AFBE6 /* HTTPServiceManager.swift in Sources */,
+				456FF19D24747F3400585E27 /* TemperatureModel+CoreDataProperties.swift in Sources */,
+				456FF19A24747F3400585E27 /* WeatherModel+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,6 +694,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		456FF19324747D3400585E27 /* WeatherLoggerModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				456FF19424747D3400585E27 /* WeatherLoggerModel.xcdatamodel */,
+			);
+			currentVersion = 456FF19424747D3400585E27 /* WeatherLoggerModel.xcdatamodel */;
+			path = WeatherLoggerModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 456B9D472417E496005AFBE6 /* Project object */;
 }

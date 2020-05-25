@@ -15,7 +15,7 @@ class WeatherDetailsViewController: UIViewController {
     @IBOutlet weak var tempMaxLabel: UILabel!
     @IBOutlet weak var tempMinLabel: UILabel!
         
-    private var data = [String :Any]()
+    private var data = WeatherModel()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,13 +24,13 @@ class WeatherDetailsViewController: UIViewController {
     }
     
     func setupData() {
-        let tempMax = data["tempMax"] as! Double
-        let tempMin = data["tempMin"] as! Double
-        let humidity = data["humidity"] as! Int
-        tempMaxLabel?.text = "Max temperature : \(tempMax)"
-        tempMinLabel?.text = "Min temperature : \(tempMin)"
-        humidityLabel?.text = "Humidity : \(humidity)"
-        switch humidity {
+        let tempMax = data.currentTemperature?.temperatureMax
+        let tempMin = data.currentTemperature?.temperatureMin
+        let humidity = data.currentTemperature?.humidity
+        tempMaxLabel?.text = "Max temperature : \(tempMax!)"
+        tempMinLabel?.text = "Min temperature : \(tempMin!)"
+        humidityLabel?.text = "Humidity : \(humidity!)"
+        switch humidity! {
             case 0..<25:
                 humidityImageView?.image = UIImage.init(systemName: "sun.max.fill")
             case 25..<50:
@@ -47,7 +47,7 @@ class WeatherDetailsViewController: UIViewController {
         }
     }
     
-    func configure(vm : [String:Any]) {
+    func configure(vm : WeatherModel) {
         data = vm
     }
     

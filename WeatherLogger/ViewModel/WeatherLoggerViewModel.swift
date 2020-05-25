@@ -7,37 +7,80 @@
 //
 
 import Foundation
+import CoreData
 
-struct WeatherLoggerViewModel {
+class WeatherLoggerViewModel {
     
-    func addWeatherViewModel(_ vm: WeatherModel, dateString : String) {
-        var weatherViewModels = [[String : Any]]()
-        let userDefaults = UserDefaults.standard
-        let dict = ["temp":vm.currentTemperature.temperature, "city":vm.name ,"date": dateString,"humidity": vm.currentTemperature.humidity, "tempMin":vm.currentTemperature.temperatureMin, "tempMax":vm.currentTemperature.temperatureMax] as [String : Any]
-        if var weatherVMs = userDefaults.value(forKey: "weatherVM") as? [[String : Any]] {
-            weatherVMs.append(dict)
-            userDefaults.set(weatherVMs, forKey: "weatherVM")
-        } else {
-            weatherViewModels.append(dict)
-            userDefaults.set(weatherViewModels, forKey: "weatherVM")
+    var data = [WeatherModel]()
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "WeatherLoggerModel")
+        
+        // load the database if it exists, if not create it.
+        container.loadPersistentStores { storeDescription, error in
+            // resolve conflict by using correct NSMergePolicy
+            container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            
+            if let error = error {
+                print("Unresolved error \(error)")
+            }
+        }
+        return container
+    }()
+    
+    init() {
+        loadSavedData()
+    }
+    
+    func loadSavedData() {
+            let request: NSFetchRequest<WeatherModel> = WeatherModel.fetchRequest()
+            //let sort = NSSortDescriptor(key: "gitcommit.committer.date", ascending: false)
+            //request.sortDescriptors = [sort]
+    
+            do {
+                // fetch is performed on the NSManagedObjectContext
+                data = try persistentContainer.viewContext.fetch(request)
+                print("Got \(data.count) weathermodel")
+            } catch {
+                print("Fetch failed")
+            }
+        }
+    
+    // save changes from memory back to the database (from memory)
+    // viewContext is checked for changes
+    // then saves are comitted to the store
+    func saveContext() {
+        if persistentContainer.viewContext.hasChanges {
+            do {
+                try persistentContainer.viewContext.save()
+                print ("Saved")
+            } catch {
+                print("An error occurred while saving: \(error)")
+            }
         }
     }
     
     func numberOfRows(_ section: Int) -> Int {
-        let userDefaults = UserDefaults.standard
-        if let weatherVMs = userDefaults.value(forKey: "weatherVM") as? [[String : Any]] {
-            return weatherVMs.count
-        }
-        return 0
+        return data.count
     }
     
-    func modelAt(_ index: Int) -> [String : Any] {
-        let userDefaults = UserDefaults.standard
-        if let weatherVMs = userDefaults.value(forKey: "weatherVM") as? [[String : Any]] {
-            let dict = weatherVMs[index]
-            return dict
+    func modelAt(_ index: Int) -> WeatherModel {
+        return data[index]
+    }
+    
+    func getWeatherResource(_ weatherUrl: URL) -> Resource<WeatherModel> {
+        
+        let weatherResource = Resource<WeatherModel>(url: weatherUrl) { data in
+            
+            let decoder = JSONDecoder()
+            
+            // Assign the NSManagedObject Context to the decoder
+            decoder.userInfo[CodingUserInfoKey.context!] = self.persistentContainer.viewContext
+            
+            let weatherVM = try? decoder.decode(WeatherModel.self, from: data)
+            return weatherVM
         }
-        return [:]
+        return weatherResource
     }
     
 }

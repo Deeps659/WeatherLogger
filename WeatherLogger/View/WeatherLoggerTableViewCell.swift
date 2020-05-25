@@ -16,14 +16,18 @@ class WeatherLoggerTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     
     
-    func configure(_ vm: [String:Any]) {
+    func configure(_ vm: WeatherModel) {
         
-        let dateStr = vm["date"] as! String
-        let city = vm["city"] as! String
-        let temp = vm["temp"] as! Double
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateStr = formatter.string(from: vm.date ?? Date())
+         
+        let city = vm.name
+        let temp = vm.currentTemperature?.temperature
         self.cityLabel.text = city
         self.dateLabel.text = "Current time: \(dateStr)"
-        let formattedTemp = String(format: "%.0f°",temp)
+        let formattedTemp = String(format: "%.0f°",temp!)
         self.tempLabel.text = "Current temperature: \(formattedTemp)F"
     }
 
