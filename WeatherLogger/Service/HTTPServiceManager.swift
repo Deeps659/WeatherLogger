@@ -8,23 +8,34 @@
 
 import Foundation
 
-struct Resource<W> {
-    let url: URL
-    let parse: (Data) -> W?
+//struct Resource<W> {
+//    let url: URL
+//    let parse: (Data) -> W?
+//}
+
+enum Result<Success, Failure : Error> {
+    case success(Success)
+    case failure(Failure)
+}
+
+enum HTTPError: Error {
+    case invalidURL
+    case emptyData
+    case invalidResponse(Data?, URLResponse?)
 }
 
 final class HTTPServiceManager {
     
-    func loadData<W>(resource: Resource<W>, completion: @escaping (W?) -> ()) {
-        
-        URLSession.shared.dataTask(with: resource.url) { data, response, error in
-        
+    func loadData(urlStr: String, completion: @escaping (Result<Data, Error>) -> ()) {
+        guard let url = URL(string: urlStr) else {
+            completion(.failure(HTTPError.invalidURL))
+            return
+        }
+        URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
-                DispatchQueue.main.async {
-                     completion(resource.parse(data))
-                }
+                completion(.success(data))
             } else {
-                completion(nil)
+                completion(.failure(HTTPError.emptyData))
             }
             
         }.resume()

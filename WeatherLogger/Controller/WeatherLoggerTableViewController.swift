@@ -62,27 +62,29 @@ class WeatherLoggerTableViewController: UITableViewController {
 
     @IBAction func loadCurrentTemp(_ sender: UIBarButtonItem) {
         
-        let weatherURL = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&APPID=a6d75244f45c82b9690164487bcfb318&units=imperial")!
-        
-        let weatherResource = weatherLoggerViewModel.getWeatherResource(weatherURL)
-        
-        HTTPServiceManager().loadData(resource: weatherResource) {  result in
-            if let weatherVM = result {
-                //save current date when we fetched data from API
-                weatherVM.date = Date()
-                print(weatherVM)
-                self.weatherLoggerViewModel.saveContext()
-                self.weatherLoggerViewModel.loadSavedData()
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else {return}
-                    self.tableView.reloadData()
-                    let count = self.weatherLoggerViewModel.numberOfRows(0)
-                    if self.weatherLoggerViewModel.numberOfRows(0) > 3 {
-                        let indexPath = IndexPath(row: count-1, section: 0)
-                        self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        let weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&APPID=a6d75244f45c82b9690164487bcfb318&units=imperial"
+        HTTPServiceManager().loadData(urlStr: weatherURL) {  [weak self] result in
+            switch(result) {
+                case .success(let data):
+                    let weatherVM = self?.weatherLoggerViewModel.getWeatherResource(data)
+                    //save current date when we fetched data from API
+                    weatherVM?.date = Date()
+                    print(weatherVM)
+                    self?.weatherLoggerViewModel.saveContext()
+                    self?.weatherLoggerViewModel.loadSavedData()
+                    
+                    DispatchQueue.main.async {
+                        self?.tableView.reloadData()
+                        if let count = self?.weatherLoggerViewModel.numberOfRows(0)  {
+                            if count > 3 {
+                                let indexPath = IndexPath(row: count-1, section: 0)
+                                self?.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+                            }
+                        }
                     }
-                }
+                
+                case .failure(let error):
+                    print(error.localizedDescription)
             }
         }
     }

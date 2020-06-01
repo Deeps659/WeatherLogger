@@ -68,19 +68,14 @@ class WeatherLoggerViewModel {
         return data[index]
     }
     
-    func getWeatherResource(_ weatherUrl: URL) -> Resource<WeatherModel> {
+    func getWeatherResource(_ data: Data) -> WeatherModel? {
         
-        let weatherResource = Resource<WeatherModel>(url: weatherUrl) { data in
-            
-            let decoder = JSONDecoder()
-            
-            // Assign the NSManagedObject Context to the decoder
-            decoder.userInfo[CodingUserInfoKey.context!] = self.persistentContainer.viewContext
-            
-            let weatherVM = try? decoder.decode(WeatherModel.self, from: data)
-            return weatherVM
-        }
-        return weatherResource
+        let decoder = JSONDecoder()
+        // Assign the NSManagedObject Context to the decoder
+        decoder.userInfo[CodingUserInfoKey.context!] = self.persistentContainer.viewContext
+        
+        let weatherVM = try? decoder.decode(WeatherModel.self, from: data)
+        return weatherVM
     }
     
 }
