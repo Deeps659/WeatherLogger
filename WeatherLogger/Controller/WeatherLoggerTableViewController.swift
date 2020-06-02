@@ -66,9 +66,12 @@ class WeatherLoggerTableViewController: UITableViewController {
         HTTPServiceManager().loadData(urlStr: weatherURL) {  [weak self] result in
             switch(result) {
                 case .success(let data):
-                    let weatherVM = self?.weatherLoggerViewModel.getWeatherResource(data)
+                    guard let weatherVM = self?.weatherLoggerViewModel.getWeatherResource(data) else {
+                        print("Parsing error")
+                        return
+                    }
                     //save current date when we fetched data from API
-                    weatherVM?.date = Date()
+                    weatherVM.date = Date()
                     print(weatherVM)
                     self?.weatherLoggerViewModel.saveContext()
                     self?.weatherLoggerViewModel.loadSavedData()
