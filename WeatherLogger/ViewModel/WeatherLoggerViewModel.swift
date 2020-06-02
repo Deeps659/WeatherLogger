@@ -37,14 +37,26 @@ class WeatherLoggerViewModel {
             //let sort = NSSortDescriptor(key: "gitcommit.committer.date", ascending: false)
             //request.sortDescriptors = [sort]
     
-            do {
-                // fetch is performed on the NSManagedObjectContext
-                data = try persistentContainer.viewContext.fetch(request)
-                print("Got \(data.count) weathermodel")
-            } catch {
-                print("Fetch failed")
-            }
+            performFetch(request)
         }
+    
+    private func performFetch(_ request: NSFetchRequest<WeatherModel>) {
+        do {
+            // fetch is performed on the NSManagedObjectContext
+            data = try persistentContainer.viewContext.fetch(request)
+            print("Got \(data.count) weathermodel")
+        } catch {
+            print("Fetch failed")
+        }
+    }
+    
+    func searchData(_ searchString : String) {
+        let request: NSFetchRequest<WeatherModel> = WeatherModel.fetchRequest()
+        
+        let predicate = NSPredicate(format: "name contains[c] %@", searchString)
+        request.predicate = searchString == "" ? nil : predicate
+        performFetch(request)
+    }
     
     // save changes from memory back to the database (from memory)
     // viewContext is checked for changes

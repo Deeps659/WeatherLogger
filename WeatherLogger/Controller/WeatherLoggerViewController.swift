@@ -8,7 +8,10 @@
 
 import UIKit
 
-class WeatherLoggerTableViewController: UITableViewController {
+class WeatherLoggerViewController: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     private var weatherLoggerViewModel = WeatherLoggerViewModel()
     private var cityName : String = "Gurgaon"
@@ -26,39 +29,6 @@ class WeatherLoggerTableViewController: UITableViewController {
             tableView.scrollToRow(at: indexPath, at: .top, animated: false)
         }
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.weatherLoggerViewModel.numberOfRows(section)
-    }
-
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath) as! WeatherLoggerTableViewCell
-
-        let weatherVM = self.weatherLoggerViewModel.modelAt(indexPath.row)
-        cell.configure(weatherVM)
-
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "weatherDetail") as? WeatherDetailsViewController
-        let weatherVM = self.weatherLoggerViewModel.modelAt(indexPath.row)
-        controller?.configure(vm: weatherVM)
-
-        if let vc = controller {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-
-    }
- 
 
     @IBAction func loadCurrentTemp(_ sender: UIBarButtonItem) {
         
@@ -108,8 +78,55 @@ class WeatherLoggerTableViewController: UITableViewController {
 
 }
 
+    // MARK: - Search
+extension WeatherLoggerViewController : UISearchBarDelegate {
+    
+   
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("searchText \(searchText)")
+        self.weatherLoggerViewModel.searchData(searchText)
+        self.tableView.reloadData()
+    }
+}
+
+
+    // MARK: - Table view data source
+extension WeatherLoggerViewController : UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.weatherLoggerViewModel.numberOfRows(section)
+    }
+
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath) as! WeatherLoggerTableViewCell
+
+        let weatherVM = self.weatherLoggerViewModel.modelAt(indexPath.row)
+        cell.configure(weatherVM)
+
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "weatherDetail") as? WeatherDetailsViewController
+        let weatherVM = self.weatherLoggerViewModel.modelAt(indexPath.row)
+        controller?.configure(vm: weatherVM)
+
+        if let vc = controller {
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+
+    }
+    
+}
 // MARK: - Change city Delegate
-extension WeatherLoggerTableViewController : ChangeCityDelegate {
+extension WeatherLoggerViewController : ChangeCityDelegate {
     func changeCity(cityName: String) {
         self.cityName = cityName
         self.navigationItem.title = "Weather Logger for \(cityName)"
